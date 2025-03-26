@@ -136,7 +136,17 @@ void execute(string const cmd, Calculator& calc) {
             print_registers(calc);
             break;
         }
-        
+        case 'm':
+            print_menu(calc);
+            break;
+        case 'p':
+            print_registers(calc);
+            break;
+        case 'q':
+            break;
+        default:
+            spdlog::error("{} is an unknown command", cmd_ch);
+            break;
 
     }
 }
