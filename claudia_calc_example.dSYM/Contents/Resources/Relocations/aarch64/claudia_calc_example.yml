@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/amanmurshed/Downloads/claudia_calc/claudia_calc_example'
+relocations:     []
+...
