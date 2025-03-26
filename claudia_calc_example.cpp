@@ -66,7 +66,7 @@ void execute(string const cmd, Calculator& calc) {
         spdlog::error("Empty command");
         return;
     }
-    // lower annd get first char of command
+    // lower and get first char of command
     char const cmd_ch = std::tolower(cmd[0]);
 
     switch (cmd_ch) {
@@ -136,17 +136,7 @@ void execute(string const cmd, Calculator& calc) {
             print_registers(calc);
             break;
         }
-        case 'm':
-            print_menu(calc);
-            break;
-        case 'p':
-            print_registers(calc);
-            break;
-        case 'q':
-            break;
-        default:
-            spdlog::error("{} is an unknown command", cmd_ch);
-            break;
+        
 
     }
 }
