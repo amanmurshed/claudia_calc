@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <string>
+#include <variant>
 
 using namespace std;
 
@@ -14,19 +16,18 @@ namespace claudia_calc {
 enum reg_name { A = 0, B, C, D };
 enum operation : char { PLUS = '+', MINUS = '-', MULTIPLY = '*', DIVIDE = '/' };
 
-/*
- * STUDENTS CAN DEFINE ANY DATA STRUCTURES OR DEFINTIONS THEY MAY NEED HERE
- */
+// Define a register value type that can hold either float or string
+using reg_value = std::variant<float, std::string>;
 
- struct Calculator {
-     float registers[NUM_REGISTERS] = {0.0f, 0.0f, 0.0f, 0.0f};
+struct Calculator {
+    reg_value registers[NUM_REGISTERS] = {0.0f, 0.0f, 0.0f, 0.0f};
 
-     // Format the number to 3 significant digits
-     string format_number(float number) {
-         stringstream ss;
-         ss << fixed << setprecision(3) << number;
-         return ss.str();
-     }
- };
+    // Format the number to 3 significant digits
+    string format_number(float number) {
+        stringstream ss;
+        ss << fixed << setprecision(3) << number;
+        return ss.str();
+    }
+};
 
 }  // namespace claudia_calc

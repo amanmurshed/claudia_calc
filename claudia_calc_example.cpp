@@ -1,11 +1,7 @@
 #include "claudia_calc_example.h"
-
 #include <sys/types.h>
-
 #include <iostream>
-
 #include "spdlog/spdlog.h"
-
 using namespace std;
 
 namespace claudia_calc {
@@ -136,7 +132,8 @@ void execute(string const cmd, Calculator& calc) {
         case '4': {
             // Convert char to register
             reg_name reg = static_cast<reg_name>(cmd_ch - '1');
-            calc.registers[reg] = 0.0f; // Clear register
+            //clear register
+            calc.registers[reg] = 0.0f;
             print_registers(calc);
             break;
         }
