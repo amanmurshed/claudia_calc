@@ -1,7 +1,11 @@
 #include "claudia_calc_example.h"
+
 #include <sys/types.h>
+
 #include <iostream>
+
 #include "spdlog/spdlog.h"
+
 using namespace std;
 
 namespace claudia_calc {
