@@ -170,8 +170,7 @@ void start() {
 using namespace claudia_calc;
 
 int main() {
-    spdlog::set_level(spdlog::level::debug);
+    spdlog::set_level(spdlog::level::warn);
     start();
-
     return 0;
 }

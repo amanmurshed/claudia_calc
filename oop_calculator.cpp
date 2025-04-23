@@ -6,12 +6,9 @@
 #include <optional>
 #include "spdlog/spdlog.h"
 #include "fmt/core.h"
-
-
 #include <string>
 #include <sstream>
 #include <iomanip>
-
 
 using namespace std;
 
@@ -69,6 +66,7 @@ void handle_arithmetic(char op, Calculator& calc) {
     cin >> lhs;
     cout << "Enter a rhs register: ";
     cin >> rhs;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     reg_name lhs_reg = to_reg_name(lhs);
     reg_name rhs_reg = to_reg_name(rhs);
@@ -94,9 +92,43 @@ void handle_arithmetic(char op, Calculator& calc) {
                 result = f1 / f2;
                 break;
         }
-    } else if (op == '+' && std::holds_alternative<std::string>(val1) && std::holds_alternative<std::string>(val2)) {
+    }
+    else if (op == '+' && std::holds_alternative<std::string>(val1) && std::holds_alternative<std::string>(val2)) {
         result = std::get<std::string>(val1) + std::get<std::string>(val2);
-    } else {
+    }
+    else if (op == '*' && std::holds_alternative<std::string>(val1) && std::holds_alternative<float>(val2)) {
+        std::string str = std::get<std::string>(val1);
+        int times = static_cast<int>(std::get<float>(val2));
+        if (times < 0) {
+            spdlog::error("Cannot multiply string by a negative number");
+            return;
+        }
+        std::string repeated;
+        for (int i = 0; i < times; ++i) repeated += str;
+        result = repeated;
+    }
+    else if (op == '*' && std::holds_alternative<float>(val1) && std::holds_alternative<std::string>(val2)) {
+        std::string str = std::get<std::string>(val2);
+        int times = static_cast<int>(std::get<float>(val1));
+        if (times < 0) {
+            spdlog::error("Cannot multiply string by a negative number");
+            return;
+        }
+        std::string repeated;
+        for (int i = 0; i < times; ++i) repeated += str;
+        result = repeated;
+    }
+    else if (op == '/' && std::holds_alternative<std::string>(val1) && std::holds_alternative<float>(val2)) {
+        std::string str = std::get<std::string>(val1);
+        int parts = static_cast<int>(std::get<float>(val2));
+        if (parts <= 0) {
+            spdlog::error("Cannot divide string by zero or negative integer");
+            return;
+        }
+        int split_len = str.length() / parts;
+        result = str.substr(0, split_len);
+    }
+    else {
         spdlog::error("Cannot perform '{}' on types {} and {}",
                       op,
                       std::holds_alternative<float>(val1) ? "number" : "string",
@@ -129,6 +161,7 @@ void execute(const string& cmd, Calculator& calc, optional<reg_name>& active_reg
             cout << "Clear register " << to_char(reg) << " to [0] number or [s] empty string? ";
             char mode;
             cin >> mode;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             if (mode == 's' || mode == 'S') {
                 calc.registers[reg] = std::string("");
             } else {
@@ -164,6 +197,7 @@ void start() {
 
     while (true) {
         cout << "Enter a command or value: ";
+        if (cin.peek() == '\n') cin.ignore(); 
         getline(cin, cmd);
 
         if (cmd == "q") break;
@@ -188,7 +222,8 @@ void start() {
 using namespace claudia_calc;
 
 int main() {
-    spdlog::set_level(spdlog::level::info);
+    // Disable info/debug logs
+    spdlog::set_level(spdlog::level::warn); 
     start();
     return 0;
 }
